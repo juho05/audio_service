@@ -402,6 +402,9 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
         Activity activity = clientInterface.activity;
         if (audioHandlerInterface != null && activity.getIntent().getAction() != null) {
             boolean clicked = activity.getIntent().getAction().equals(AudioService.NOTIFICATION_CLICK_ACTION);
+            if (clicked && AudioService.instance != null) {
+                AudioService.instance.createFlutterEngineOnNotificationClick();
+            }
             audioHandlerInterface.invokeMethod("onNotificationClicked", mapOf("clicked", clicked));
         }
     }

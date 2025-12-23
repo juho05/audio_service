@@ -342,8 +342,9 @@ public class AudioService extends MediaBrowserServiceCompat {
             }
         };
 
-        flutterEngine = AudioServicePlugin.getFlutterEngine(this);
-        System.out.println("flutterEngine warmed up");
+        // Remove flutter caching from onCreate, as it interferes with notifications
+        // let it be created when notification is tapped
+        //flutterEngine = AudioServicePlugin.getFlutterEngine(this);
     }
 
     @Override
@@ -409,6 +410,17 @@ public class AudioService extends MediaBrowserServiceCompat {
         }
         if (!config.androidResumeOnClick) {
             mediaSession.setMediaButtonReceiver(null);
+        }
+    }
+
+    /**
+     * Creates and caches the Flutter engine when notification is clicked.
+     */
+    public void createFlutterEngineOnNotificationClick() {
+        try {
+            flutterEngine = AudioServicePlugin.getFlutterEngine(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
